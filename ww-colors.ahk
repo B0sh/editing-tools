@@ -33,20 +33,36 @@ if (WinActive("ahk_exe Resolve.exe") and A_Args.Has(1))
 
     if (userColor != 0)
     {
+        CoordMode "Mouse", "Client"
+
         Title := WinGetTitle("A")
-        if (Title = "Color") {
-            CoordMode "Mouse", "Window"
-            
-            Click 402, 373
+        if (Title != "Color")
+        {
+            try
+            {
+                if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "Resolve_color.png"))
+                {
+                    Click FoundX + 75, FoundY + 10
+                    Sleep 400
+                }
+            }
+            catch as exc
+                MsgBox "Could not conduct the search due to the following error:`n" exc.Message
+        }
+
+        Title := WinGetTitle("A")
+        if (Title = "Color")
+        {
+            Click 391, 341
             Sleep 50
-            Click 402, 373
+            Click 391, 341
             Sleep 50
             Send userColor
             Sleep 50
             Send "{Enter}"
         }
-
-        else {
+        else
+        {
             Clipboard := userColor
         }
 
