@@ -13,6 +13,8 @@ def get_dv(app, action, content):
     rootFolder = mediaPool.GetRootFolder()
     timeline = project.GetCurrentTimeline()
     mediaStorage = resolve.GetMediaStorage()
+    gallery = project.GetGallery()
+    stillAlbum = gallery.GetCurrentStillAlbum()
     
     # use dot notation to access properties
     return SimpleNamespace(**{
@@ -26,7 +28,9 @@ def get_dv(app, action, content):
         "timeline": timeline,
 
         "action": action,
-        "content": content
+        "content": content,
+        "gallery": gallery,
+        "stillAlbum": stillAlbum,
     })
 
 def find_track(dv, track_name, track_type):

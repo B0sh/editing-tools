@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 
-# undocumented functions
+# 18.5 undocumented functions
 # https://forum.blackmagicdesign.com/viewtopic.php?f=21&t=113040
+
+# undocumented functions
+# https://gist.github.com/X-Raym/2f2bf453fc481b9cca624d7ca0e19de8?permalink_comment_id=4315832
+
 
 from lib import *
 from addclip import *
+from getframe import *
 import configparser
 import inspect
 from datetime import datetime
@@ -32,6 +37,9 @@ match dv.action:
 
     case "addnewclip":
         action_add_new_clip(dv)
+
+    case "getframe":
+        action_get_frame(dv)
 
 
 
