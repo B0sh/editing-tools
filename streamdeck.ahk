@@ -25,6 +25,8 @@ else if (A_Args[1] == "action")
         case "overlay":
             player := ImageName(player)
             runScript("addclip", player . "-overlay.png")
+        case "gamesound":
+            updateTracksForGameSound()
     }
 }
 
@@ -116,5 +118,32 @@ PlayerColor(player) {
     else
     {
         Clipboard := userColor
+    }
+}
+
+updateTracksForGameSound()
+{
+    if (WinActive("DaVinci Resolve - ahk_exe Resolve.exe"))
+    {
+        Send "!a"
+        Sleep 300
+        Click 239, 54 ; audio tab
+        Sleep 100
+        Click 78, 187 ; format
+        Sleep 100
+        Send "s{Enter}" ; select stereo
+
+        Sleep 100
+        Click 259, 185
+        Sleep 100
+        Send "Embedded Channel 5{Enter}"
+        Sleep 100
+
+        Click 259, 212
+        Sleep 100
+        Send "Embedded Channel 6{Enter}"
+        Sleep 100
+
+        Send "{Enter}"
     }
 }

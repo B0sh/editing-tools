@@ -47,7 +47,7 @@ def insertClipAtPlayhead(dv, track, clip):
     subClip = {
         "mediaPoolItem": clip,
         "startFrame": 0,
-        "endFrame":  24,
+        "endFrame":  60,
         "recordFrame": frame,
         "trackIndex": track,
     }
