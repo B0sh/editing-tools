@@ -1,24 +1,30 @@
 ﻿#Requires AutoHotkey v2.0
+#Include davinci-shared.ahk
 
 active_project := FileRead("activeproject.txt")
-
-if (ProcessExist("Resolve.exe") and A_Args.Has(1))
+if (A_Args.Has(1))
 {
+    focusDavinci()
+    Sleep 300
 
     dest := "screenshot-" A_Now ".png"
-
     path := active_project "\" dest
-
     FileMove A_Args[1], path
-    WinActivate("Davinci Resolve - ", "ahk_exe Resolve.exe")
 
-    ; Try to run as fast as possible by looping and checking if the window is active
-    Loop 20 {
-        Sleep 100
-        if (WinActive("ahk_exe Resolve.exe")) {
+    try
+    {
+        if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "images/resolve-master.png"))
+        {
+            MouseGetPos &xpos, &ypos
+            Click FoundX + 50, FoundY + 10
             Sleep 100
-            Run '"C:\YouTube\Scripts\davinci-script.ahk" addnewclip "' path '"'
+            MouseMove xpos, ypos
         }
-        Break
     }
+    catch as exc
+    {
+        MsgBox "Could not conduct the search due to the following error:`n" exc.Message
+    } 
+
+    runScript("addnewclip", path)
 }

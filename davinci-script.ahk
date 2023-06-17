@@ -1,17 +1,8 @@
 ﻿#Requires AutoHotkey v2.0
+#Include davinci-shared.ahk
 
-ini(key, value) {
-    IniWrite value, "C:\YouTube\davinci.ini", "davinci", key
-}
-
-runScript(action, content) {
-    if (WinActive("ahk_exe Resolve.exe") and A_Args.Has(1))
-    {
-        ini("action", action)
-        ini("content", A_Args[2])
-
-        Send "!{F10}"
-    }
+if (!ProcessExist("Resolve.exe")) {
+    Return
 }
 
 if (A_Args.Has(1)) {

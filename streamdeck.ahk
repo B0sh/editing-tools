@@ -1,23 +1,5 @@
 #Requires AutoHotkey v2.0
-
-ini(key, value) {
-    IniWrite value, "C:\YouTube\davinci.ini", "davinci", key
-}
-
-runScript(action, content) {
-    if (WinActive("ahk_exe Resolve.exe"))
-    {
-        
-        ini("action", action)
-        ini("content", content)
-
-        Send "!{F10}"
-    }
-}
-
-
-
-
+#Include davinci-shared.ahk
 
 if (A_Args[1] == "player")
 {
@@ -57,20 +39,18 @@ ImageName(player) {
 }
 
 GetColor(name) {
-colors := []
-colors.Push([ "B0sh", "009ACE" ])
-colors.Push([ "Lawson", "00993A" ])
-colors.Push([ "Satch", "E4CB42" ])
-colors.Push([ "Pablo", "CE1125" ])
-colors.Push([ "James", "462376" ])
-colors.Push([ "George", "1E191A" ])
-colors.Push([ "Qing", "F7F577" ])
-colors.Push([ "Grant", "AEE7FF" ])
-colors.Push([ "Aubry", "895D94" ])
-colors.Push([ "Sean", "64777D" ])
-colors.Push([ "Faryn", "E17C90" ])
-
-
+    colors := []
+    colors.Push([ "B0sh", "009ACE" ])
+    colors.Push([ "Lawson", "00993A" ])
+    colors.Push([ "Satch", "E4CB42" ])
+    colors.Push([ "Pablo", "CE1125" ])
+    colors.Push([ "James", "462376" ])
+    colors.Push([ "George", "1E191A" ])
+    colors.Push([ "Qing", "F7F577" ])
+    colors.Push([ "Grant", "AEE7FF" ])
+    colors.Push([ "Aubry", "895D94" ])
+    colors.Push([ "Sean", "64777D" ])
+    colors.Push([ "Faryn", "E17C90" ])
 
     for index, x in colors
     {
@@ -85,47 +65,56 @@ colors.Push([ "Faryn", "E17C90" ])
 
 
 PlayerColor(player) {
-        userColor := GetColor(player)
-    if (WinActive("ahk_exe Resolve.exe"))
+    userColor := GetColor(player)
+    if (userColor == 0)
     {
+        Return
+    }
 
-        if (userColor != 0)
+    if (WinActive("DaVinci Resolve - ahk_exe Resolve.exe"))
+    {
+        MouseGetPos &xpos, &ypos
+        CoordMode "Mouse", "Client"
+
+        Title := WinGetTitle("A")
+        if (Title != "Color")
         {
-            CoordMode "Mouse", "Client"
-
-            Title := WinGetTitle("A")
-            if (Title != "Color")
+            try
             {
-                try
+                if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "images/resolve-color.png"))
                 {
-                    if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "Resolve_color.png"))
-                    {
-                        Click FoundX + 75, FoundY + 10
-                        Sleep 400
-                    }
+                    Click FoundX + 75, FoundY + 10
                 }
-                catch as exc
-                    MsgBox "Could not conduct the search due to the following error:`n" exc.Message
+                else 
+                {
+                    Return
+                }
             }
+            catch as exc
+                {
+                MsgBox "Could not conduct the search due to the following error:`n" exc.Message
+            }
+        }
 
+        Loop 20 {
             Title := WinGetTitle("A")
             if (Title = "Color")
             {
-                Click 391, 341
-                Sleep 50
-                Click 391, 341
+                Click 391, 341, 2
                 Sleep 50
                 Send userColor
                 Sleep 50
                 Send "{Enter}"
+                MouseMove xpos, ypos
+                Return
             }
-            else
-            {
-                Clipboard := userColor
-            }
-
+            Sleep 50
         }
 
-
+        MouseMove xpos, ypos
+    }
+    else
+    {
+        Clipboard := userColor
     }
 }
