@@ -37,6 +37,12 @@ ImageName(player) {
     if (player == "Satch") {
         return "GoldenBagon"
     }
+    if (player == "Pablo") {
+        return "Catholoco"
+    }
+    if (player == "Faryn") {
+        return "Farynheight"
+    }
     return player
 }
 
@@ -53,6 +59,7 @@ GetColor(name) {
     colors.Push([ "Aubry", "895D94" ])
     colors.Push([ "Sean", "64777D" ])
     colors.Push([ "Faryn", "E17C90" ])
+    colors.Push([ "Elwyn", "E475FF" ])
 
     for index, x in colors
     {
@@ -73,7 +80,7 @@ PlayerColor(player) {
         Return
     }
 
-    if (WinActive("DaVinci Resolve - ahk_exe Resolve.exe"))
+    if (WinActive("DaVinci Resolve ahk_exe Resolve.exe"))
     {
         MouseGetPos &xpos, &ypos
         CoordMode "Mouse", "Client"
@@ -81,20 +88,9 @@ PlayerColor(player) {
         Title := WinGetTitle("A")
         if (Title != "Color")
         {
-            try
-            {
-                if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "images/resolve-color.png"))
-                {
-                    Click FoundX + 75, FoundY + 10
-                }
-                else 
-                {
-                    Return
-                }
-            }
-            catch as exc
-                {
-                MsgBox "Could not conduct the search due to the following error:`n" exc.Message
+            if (!imageClick("images/resolve-color.png", 75, 10))
+            { 
+                Return
             }
         }
 
@@ -123,7 +119,7 @@ PlayerColor(player) {
 
 updateTracksForGameSound()
 {
-    if (WinActive("DaVinci Resolve - ahk_exe Resolve.exe"))
+    if (WinActive("DaVinci Resolve ahk_exe Resolve.exe"))
     {
         Send "!a"
         Sleep 300
